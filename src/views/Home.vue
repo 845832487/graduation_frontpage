@@ -30,11 +30,11 @@
           <el-button size="small" @click="editInfo(scope.row)"
           >修改
           </el-button>
-          <el-popconfirm title="确定删除?">
+          <el-popconfirm title="确定删除?"
+          @confirm="delInfo(scope.row)">
             <template #reference>
               <el-button size="small"
-                         type="danger"
-                         @click="console.log(scope.$index) ;console.log(scope.row)">删除
+                         type="danger">删除
               </el-button>
             </template>
           </el-popconfirm>
@@ -124,6 +124,19 @@ export default {
     inputChange(form) {
       this.inputDisabled = form.id;
     },
+    delInfo(row) {
+      this.form = JSON.parse(JSON.stringify(row));
+      request.delete("/api/StudentDetail/delSingleStudent",{
+        params: {
+          studentId: this.form.id
+        }
+      }).then(res => {
+        if (res.code === 666) {
+          ElMessage.success("删除成功")
+        }else ElMessage.error("删除失败")
+      });
+      this.load()
+    },
     editInfo(row) {
       this.form = JSON.parse(JSON.stringify(row));
       this.preId = this.form.id;
@@ -148,7 +161,6 @@ export default {
       this.inputChange(this.form);
     },
     saveAddStudent() {
-      console.log(this.preId);
       if (this.preId === this.form.id) {
         console.log("调用修改方法")
         request.put("/api/StudentDetail/updStudent", this.form).then(res => {
