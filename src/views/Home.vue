@@ -34,7 +34,7 @@
           @confirm="delInfo(scope.row)">
             <template #reference>
               <el-button size="small"
-                         type="danger"> 删除
+                         type="danger">删除
               </el-button>
             </template>
           </el-popconfirm>
