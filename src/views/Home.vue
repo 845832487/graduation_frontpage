@@ -109,15 +109,15 @@ export default {
   data() {
     return {
       inputDisabled: false,
-      form: {},
       dialogVisible: false,
       input: '',
       currentPage: 1,
       pageSize: 10,
       total: 0,
       search: '',
-      tableData: [],
-      preId: 0
+      preId: 0,
+      form: {},
+      tableData: []
     }
   },
   methods: {
