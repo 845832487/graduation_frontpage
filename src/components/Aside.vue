@@ -2,7 +2,8 @@
   <div>
     <el-menu
         style="height: calc(100vh - 60px)"
-        default-active="2"
+        default-active="1-2"
+        default-openeds="3,1"
         class="el-menu-vertical-demo"
         @open="handleOpen"
         @close="handleClose"
@@ -13,7 +14,9 @@
           <span>信息管理</span>
         </template>
           <el-menu-item index="1-1">个人信息</el-menu-item>
-          <el-menu-item index="1-2">成员管理</el-menu-item>
+          <el-menu-item index="1-2">学生管理</el-menu-item>
+          <el-menu-item index="1-3">员工管理</el-menu-item>
+
       </el-sub-menu>
       <el-sub-menu index="2">
         <template #title>

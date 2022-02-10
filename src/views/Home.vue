@@ -9,7 +9,7 @@
         </div>
       </el-col>
       <div style="margin:15px;padding-left: 35px">
-        <el-input v-model="input"  placeholder="输入姓名查询" style="width: 60%"/>
+        <el-input v-model="input" placeholder="输入姓名查询" style="width: 60%" clearable/>
         <el-button style="margin-left: 10px" @click="load">搜索</el-button>
       </div>
     </el-row>
@@ -31,7 +31,7 @@
           >修改
           </el-button>
           <el-popconfirm title="确定删除?"
-          @confirm="delInfo(scope.row)">
+                         @confirm="delInfo(scope.row)">
             <template #reference>
               <el-button size="small"
                          type="danger"> 删除
@@ -98,16 +98,18 @@
 <script>
 import request from "../utils/request";
 import {ElMessage} from 'element-plus'
+import {isEmpty} from "element-plus/es/utils/util";
 
 export default {
   name: 'Home',
   components: {},
 
-  created() {
-    this.load()
+  mounted() {
+    this.load();
   },
   data() {
     return {
+
       inputDisabled: false,
       dialogVisible: false,
       input: '',
@@ -126,14 +128,14 @@ export default {
     },
     delInfo(row) {
       this.form = JSON.parse(JSON.stringify(row));
-      request.delete("/api/StudentDetail/delSingleStudent",{
+      request.delete("/api/studentDetail/delSingleStudent", {
         params: {
           studentId: this.form.id
         }
       }).then(res => {
         if (res.code === 666) {
           ElMessage.success("删除成功")
-        }else ElMessage.error("删除失败")
+        } else ElMessage.error("删除失败")
       });
       this.load()
     },
@@ -145,7 +147,7 @@ export default {
     },
     load() {
       console.log(this.input)
-      request.get("/api/StudentDetail/findPage", {
+      request.get("/api/studentDetail/findPage", {
         params: {
           pageNum: this.currentPage,
           pageSize: this.pageSize,
@@ -162,23 +164,26 @@ export default {
     },
     saveAddStudent() {
       if (this.preId === this.form.id) {
-        console.log("调用修改方法")
-        request.put("/api/StudentDetail/updStudent", this.form).then(res => {
+        //修改
+        request.put("/api/studentDetail/updStudent", this.form).then(res => {
           if (res.code === 666) {
             ElMessage.success("修改成功")
-          }else ElMessage.error("修改失败")
+            this.dialogVisible = false;
+          } else ElMessage.error("修改失败")
           this.preId = 0;
         });
       } else {
-        console.log("调用添加方法")
-        request.post("/api/StudentDetail/addOneStudent", this.form).then(res => {
+        //添加
+        request.post("/api/studentDetail/addOneStudent", this.form).then(res => {
           if (res.code === 666) {
             ElMessage.success("添加成功")
-          }else ElMessage.error("学号已存在")
+            this.dialogVisible = false;
+          } else ElMessage.error(res.msg)
         });
+
       }
       this.load();
-      this.dialogVisible = false;
+
     },
     sexFormat(row) {
       if (row.sex === true) {
@@ -190,9 +195,9 @@ export default {
     inOutFormat(row) {
       if (row.inOut === true) {
         return '在宿'
-      }else if (row.inOut === false) {
+      } else if (row.inOut === false) {
         return '离宿'
-      }else return '数据异常'
+      } else return '数据异常'
     },
     dormLeaderFormat(row) {
       if (row.isDormLeader === true) {
@@ -208,6 +213,10 @@ export default {
     }
   }
 }
-
+window.addEventListener("beforeunload", function (e) {
+  const confirmationMessage = "\o/";
+  (e || window.event).returnValue = confirmationMessage; // Gecko and Trident
+  return confirmationMessage; // Gecko and WebKit
+});
 
 </script>

@@ -1,7 +1,9 @@
 <template>
-
-
   <div>
+    <router-view/>
+  </div>
+
+<!--  <div>
     <el-container>
       <el-header><Header/></el-header>
       <div>
@@ -11,29 +13,29 @@
         </el-container>
       </div>
     </el-container>
-  </div>
+  </div>-->
 
 
 
 </template>
 
 <script>
-import Header from "./components/Header";
-import Aside from "./components/Aside";
-
+import {ElMessage} from 'element-plus'
 export default {
-  name: "Layout",
-  components:{
-    Header,
-    Aside
+  created() {
+    this.checkAuth();
+  },
+
+  methods: {
+    checkAuth() {
+      if (localStorage.getItem("auth") == null) {
+        ElMessage.info("尚未登录，跳转登录页面")
+        this.$router.push("/login");
+      }
+    }
   }
 }
 
-window.addEventListener("beforeunload", function(e) {
-  const confirmationMessage = "\o/";
-  (e || window.event).returnValue = confirmationMessage; // Gecko and Trident
-  return confirmationMessage; // Gecko and WebKit
-});
 </script>
 
 
