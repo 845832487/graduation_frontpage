@@ -98,7 +98,7 @@ export default {
       }else if (!re.test(this.changePasswordForm.password1)) {
         ElMessage.error("密码必须包含字母数字两种，长度6-20位，不允许有符号");
       } else {
-        request.post("/api/loginPage/changePassword",{
+        request.post("/loginPage/changePassword",{
           id: this.forgetPasswordForm.id,
           password: this.changePasswordForm.password1
         }).then(res=>{
@@ -110,7 +110,7 @@ export default {
       }
     },
     toChangePassword() {
-      request.post("/api/loginPage/checkForgetPasswordEmail", this.forgetPasswordForm).then(res => {
+      request.post("/loginPage/checkForgetPasswordEmail", this.forgetPasswordForm).then(res => {
         if (res.code === 666) {
           ElMessage.success(res.data);
           this.toChangePwdVisible = false;
@@ -133,7 +133,7 @@ export default {
       if (isEmpty(this.forgetPasswordForm.id) || this.forgetPasswordForm.id.split(' ').join('').length === 0) {
         ElMessage.error("输入学号不能为空");
       } else {
-        request.get("/api/loginPage/getForgetPasswordCode", {
+        request.get("/loginPage/getForgetPasswordCode", {
           params: {
             id: this.forgetPasswordForm.id
           }
@@ -151,28 +151,17 @@ export default {
           || this.loginForm.id.split(' ').join('').length === 0 || this.loginForm.password.split(' ').join('').length === 0) {
         ElMessage.error("账号名或密码不能为空");
       } else {
-        request.post("/api/loginPage/login", this.loginForm).then(res => {
+        request.post("/loginPage/login", this.loginForm).then(res => {
           if (res.code === 666) {
             ElMessage.success("登录成功")
-            localStorage.setItem("auth", "true");
-            this.getUserInfo()
-            this.$router.push("/home")
+            sessionStorage.setItem("auth", "1");
+            sessionStorage.setItem("user", this.loginForm.id);
+            this.$router.push("/personalInfo")
           } else ElMessage.error(res.msg)
         });
       }
     },
-    getUserInfo() {
-      request.get("/api/userRole/getInfo", {
-        params: {
-          id: this.loginForm.id
-        }
-      }).then(res => {
-        console.log(res)
-        if (res.code === 666) {
-          localStorage.setItem("role", res.data.role)
-        }
-      })
-    }
+
   }
 }
 </script>

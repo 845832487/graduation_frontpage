@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const request = axios.create({
+    baseURL: '/api',
     timeout: 5000
 })
 
@@ -10,6 +11,7 @@ const request = axios.create({
 request.interceptors.request.use(config => {
     config.headers['Content-Type'] = 'application/json;charset=utf-8';
 
+    let userName = sessionStorage.getItem('user');
     // config.headers['token'] = user.token;  // 设置请求头
     return config
 }, error => {

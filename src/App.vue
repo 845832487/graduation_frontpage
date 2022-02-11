@@ -21,20 +21,7 @@
 
 <script>
 import {ElMessage} from 'element-plus'
-export default {
-  created() {
-    this.checkAuth();
-  },
-
-  methods: {
-    checkAuth() {
-      if (localStorage.getItem("auth") == null) {
-        ElMessage.info("尚未登录，跳转登录页面")
-        this.$router.push("/login");
-      }
-    }
-  }
-}
+export default {}
 
 </script>
 

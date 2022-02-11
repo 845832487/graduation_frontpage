@@ -2,19 +2,20 @@
   <div>
     <el-menu
         style="height: calc(100vh - 60px)"
-        default-active="1-2"
-        default-openeds="3,1"
+        :default-active="this.activeIndex"
+        :default-openeds="this.opends"
         class="el-menu-vertical-demo"
         @open="handleOpen"
         @close="handleClose"
+
     >
-      <el-sub-menu index="1">
+      <el-sub-menu index="1" >
         <template #title>
           <el-icon><location /></el-icon>
           <span>信息管理</span>
         </template>
-          <el-menu-item index="1-1">个人信息</el-menu-item>
-          <el-menu-item index="1-2">学生管理</el-menu-item>
+          <el-menu-item index="/personalInfo" @click="this.$router.push('/personalInfo')">个人信息</el-menu-item>
+          <el-menu-item index="/studentDetail" @click="this.$router.push('/studentDetail')">学生管理</el-menu-item>
           <el-menu-item index="1-3">员工管理</el-menu-item>
 
       </el-sub-menu>
@@ -55,13 +56,43 @@
 
 
 <script>
+import request from "../utils/request";
+
 export default {
+  data() {
+    return {
+      activeIndex: '',
+      opends: ['1','3'],
+      userInfo: {}
+    };
+  },
+  created() {
+    this.getUserInfo();
+    this.activeIndex = this.$route.path;
+  },
+  methods: {
+    getUserInfo() {
+      request.get("/userRole/getInfo", {
+        params: {
+          id: sessionStorage.getItem("user")
+        }
+      }).then(res => {
+        if (res.code === 666) {
+          this.userInfo = res.data;
+          console.log(JSON.stringify(this.userInfo.role));
+        }
+      })
+    }
+  },
+
   components:{
     Location,
     Document,
     IconMenu,
-    Setting
+    Setting,
+
   }
+
 }
 import {
   Location,
@@ -69,7 +100,12 @@ import {
   Menu as IconMenu,
   Setting,
 } from '@element-plus/icons-vue'
-
+const handleOpen = (key, keyPath) => {
+  console.log(key, keyPath)
+}
+const handleClose = (key, keyPath) => {
+  console.log(key, keyPath)
+}
 </script>
 
 

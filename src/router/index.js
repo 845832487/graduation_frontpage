@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import request from "../utils/request";
 
 
 const routes = [
@@ -14,9 +15,9 @@ const routes = [
         component: ()=>import('../views/PersonalInfo')
       },
       {
-        path: "/home",
-        name: "home",
-        component:()=>import('../views/Home')
+        path: "/studentDetail",
+        name: "StudentDetail",
+        component:()=>import('../views/StudentDetail')
       }
     ]
   },
@@ -31,6 +32,10 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+router.beforeEach((to, from, next) => {
+  if (to.name !== 'login' && sessionStorage.getItem("auth")!=='1') next({ name: 'login' })
+  else next()
 })
 
 export default router

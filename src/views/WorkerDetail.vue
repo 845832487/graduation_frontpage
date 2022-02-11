@@ -98,15 +98,17 @@
 <script>
 import request from "../utils/request";
 import {ElMessage} from 'element-plus'
-import {isEmpty} from "element-plus/es/utils/util";
 
 export default {
-  name: 'Home',
+  name: 'WorkerDetail',
   components: {},
+
 
   mounted() {
     this.load();
   },
+
+
   data() {
     return {
 
@@ -123,12 +125,27 @@ export default {
     }
   },
   methods: {
+    checkAuth() {
+      request.get("/loginPage/checkAuth", {
+        params: {
+          userId: sessionStorage.getItem("user")
+        }
+      }).then(res => {
+        if (res.code !== 666) {
+          ElMessage.error(res.msg);
+          sessionStorage.removeItem("auth");
+          sessionStorage.removeItem("user");
+          this.$router.push("/login");
+        }
+      });
+    },
+
     inputChange(form) {
       this.inputDisabled = form.id;
     },
     delInfo(row) {
       this.form = JSON.parse(JSON.stringify(row));
-      request.delete("/api/studentDetail/delSingleStudent", {
+      request.delete("/studentDetail/delSingleStudent", {
         params: {
           studentId: this.form.id
         }
@@ -147,7 +164,7 @@ export default {
     },
     load() {
       console.log(this.input)
-      request.get("/api/studentDetail/findPage", {
+      request.get("/studentDetail/findPage", {
         params: {
           pageNum: this.currentPage,
           pageSize: this.pageSize,
@@ -165,7 +182,7 @@ export default {
     saveAddStudent() {
       if (this.preId === this.form.id) {
         //修改
-        request.put("/api/studentDetail/updStudent", this.form).then(res => {
+        request.put("/studentDetail/updStudent", this.form).then(res => {
           if (res.code === 666) {
             ElMessage.success("修改成功")
             this.dialogVisible = false;
@@ -174,7 +191,7 @@ export default {
         });
       } else {
         //添加
-        request.post("/api/studentDetail/addOneStudent", this.form).then(res => {
+        request.post("/studentDetail/addOneStudent", this.form).then(res => {
           if (res.code === 666) {
             ElMessage.success("添加成功")
             this.dialogVisible = false;
@@ -213,10 +230,6 @@ export default {
     }
   }
 }
-window.addEventListener("beforeunload", function (e) {
-  const confirmationMessage = "\o/";
-  (e || window.event).returnValue = confirmationMessage; // Gecko and Trident
-  return confirmationMessage; // Gecko and WebKit
-});
+
 
 </script>
