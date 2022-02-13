@@ -31,6 +31,7 @@ export default {
     logout() {
       sessionStorage.removeItem("auth");
       sessionStorage.removeItem("user");
+      sessionStorage.removeItem("role");
       router.push("/login");
       ElMessage.success("注销用户成功");
     }

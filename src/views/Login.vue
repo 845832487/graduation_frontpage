@@ -156,11 +156,25 @@ export default {
             ElMessage.success("登录成功")
             sessionStorage.setItem("auth", "1");
             sessionStorage.setItem("user", this.loginForm.id);
-            this.$router.push("/personalInfo")
+            this.getUserInfo();
+
           } else ElMessage.error(res.msg)
         });
       }
     },
+    getUserInfo() {
+      request.get("/userRole/getInfo", {
+        params: {
+          id: sessionStorage.getItem("user")
+        }
+      }).then(res => {
+        if (res.code === 666) {
+          sessionStorage.setItem("role", res.data.role);
+          this.$router.push("/personalInfo")
+        }
+      })
+    }
+
 
   }
 }

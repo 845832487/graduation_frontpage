@@ -1,11 +1,18 @@
 <template>
-  <div style="margin: 15px">
+  <div style="margin: 0px">
     <el-row>
       <el-col span="8">
         <div style="margin: 15px">
           <el-button @click="add_student">新增</el-button>
-          <el-button>批量导入</el-button>
-          <el-button>导出</el-button>
+          <el-button @click="multiAddVisible = true">批量导入</el-button>
+          <el-popconfirm title="确定删除?"
+                         @confirm="delMultiStudent">
+            <template #reference>
+              <el-button type="danger"> 批量删除
+              </el-button>
+            </template>
+          </el-popconfirm>
+
         </div>
       </el-col>
       <div style="margin:15px;padding-left: 35px">
@@ -14,8 +21,11 @@
       </div>
     </el-row>
 
-
-    <el-table :data="tableData" stripe style="width: 100%;padding: 15px">
+<!--显示学生信息主页面-->
+    <el-table @selection-change="selectChange"
+              :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+              stripe style="width: 100%;padding: 15px" >
+      <el-table-column type="selection" />
       <el-table-column prop="id" label="学号" width="180"/>
       <el-table-column prop="name" label="姓名" width="180"/>
       <el-table-column prop="buildingNum" label="宿舍楼编号" width="180"/>
@@ -47,12 +57,12 @@
           :page-sizes="[5, 10, 20]"
           :page-size="pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="400"
+          :total="total"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
       >
       </el-pagination>
-
+<!--      新增|修改学生信息页面-->
       <el-dialog
           v-model="dialogVisible"
           title="学生信息"
@@ -70,16 +80,10 @@
           <el-form-item label="宿舍编号">
             <el-input v-model="form.dormNum" style="width: 80%"></el-input>
           </el-form-item>
-          <el-form-item label="身份">
-            <el-radio v-model="form.isDormLeader" :label=true>舍长</el-radio>
-            <el-radio v-model="form.isDormLeader" :label=false>舍员</el-radio>
-          </el-form-item>
           <el-form-item label="性别">
             <el-radio v-model="form.sex" :label='true'>男</el-radio>
             <el-radio v-model="form.sex" :label=false>女</el-radio>
           </el-form-item>
-
-
         </el-form>
         <template #footer>
       <span class="dialog-footer">
@@ -90,28 +94,73 @@
         </template>
       </el-dialog>
 
+
+<!--      批量添加学生信息页面-->
+      <el-dialog
+          v-model="multiAddVisible"
+          title="批量导入学生信息"
+          width="65%">
+        <el-form model="form" label-width="120px">
+          <el-upload
+              accept=".xlsx,.xls"
+              :auto-upload="false"
+              :show-file-list="false"
+              :on-change="handle"
+          >
+            <el-button type="primary">{{upLoadTip}}</el-button>
+          </el-upload>
+          <el-table :data="studentList" stripe style="width: 100%;padding: 15px">
+            <el-table-column prop="id" label="学号" width="180"/>
+            <el-table-column prop="name" label="姓名" width="180"/>
+            <el-table-column prop="sex" label="性别" width="180" :formatter="sexFormat"/>
+            <el-table-column prop="buildingNum" label="宿舍楼编号" width="180"/>
+            <el-table-column prop="dormNum" label="宿舍编号" width="180"/>
+          </el-table>
+
+
+        </el-form>
+        <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="multiAddVisible = false">取消</el-button>
+        <el-button type="primary" @click="upLoad" :disabled="canUpload"
+        >确认添加</el-button>
+      </span>
+        </template>
+      </el-dialog>
+
+<!--导出学生信息页面-->
+
+
+
     </div>
   </div>
 
 </template>
 
 <script>
-import request from "../utils/request";
+import request from "../../utils/request";
 import {ElMessage} from 'element-plus'
+import {readFile} from "../../utils/fileUtils";
+import xlsx from 'xlsx';
 
 export default {
-  name: 'WorkerDetail',
+  name: 'StudentDetail',
   components: {},
 
-
   mounted() {
+  },
+  created() {
     this.load();
   },
 
 
+
   data() {
     return {
-
+      upLoadTip: '上传excel文件',
+      canUpload: true,
+      studentList: [],
+      multiAddVisible: false,
       inputDisabled: false,
       dialogVisible: false,
       input: '',
@@ -121,25 +170,60 @@ export default {
       search: '',
       preId: 0,
       form: {},
-      tableData: []
+      tableData: [],
+      selectedList: []
     }
   },
   methods: {
-    checkAuth() {
-      request.get("/loginPage/checkAuth", {
-        params: {
-          userId: sessionStorage.getItem("user")
+    delMultiStudent() {
+      request.delete("/studentDetail/delMultiStudents",{
+        data:{
+          studentDetails:this.selectedList
         }
-      }).then(res => {
-        if (res.code !== 666) {
-          ElMessage.error(res.msg);
-          sessionStorage.removeItem("auth");
-          sessionStorage.removeItem("user");
-          this.$router.push("/login");
-        }
-      });
+      }).then(res=>{
+        if (res.code === 666) {
+          this.load();
+          ElMessage.success(res.data);
+        } else ElMessage.error(res.msg);
+      })
     },
 
+    selectChange(val) {
+      this.selectedList = val;
+      console.log(val)
+    },
+    upLoad() {
+      request.put("/studentDetail/addMultiStudents", this.studentList).then(res=>{
+        if (res.code === 666) {
+          this.load();
+          ElMessage.success(res.data);
+        }else ElMessage.error(res.msg);
+      })
+      this.studentList = null;
+      this.multiAddVisible = false;
+      this.canUpload = true;
+      this.upLoadTip = '上传excel文件';
+    },
+    async handle(ev) {
+      let file = ev.raw;
+      if (!file) return;
+      let data = await readFile(file);
+      let workBook = xlsx.read(data, {type: "binary"}),
+          workSheet = workBook.Sheets[workBook.SheetNames[0]];
+      let arr = [];
+      xlsx.utils.sheet_to_json(workSheet).forEach(item=>{
+        let obj = {};
+        obj.id = String(item["学号"]);
+        obj.name = String(item["姓名"]);
+        obj.sex = item["性别"] === "男";
+        obj.buildingNum = item["楼号"];
+        obj.dormNum = item["宿舍号"];
+        arr.push(obj);
+      })
+      this.studentList = arr;
+      this.upLoadTip = '上传成功';
+      this.canUpload = false;
+    },
     inputChange(form) {
       this.inputDisabled = form.id;
     },
@@ -172,6 +256,7 @@ export default {
         }
       }).then(res => {
         this.tableData = res.data.records
+        this.total = this.tableData.length;
       });
     },
     add_student() {
@@ -223,10 +308,11 @@ export default {
         return '舍员'
       }
     },
-    handleSizeChange() {
+    handleSizeChange(val) {
+      this.pageSize = val;    //动态改变
     },
-    handleCurrentChange() {
-
+    handleCurrentChange(val) {
+      this.currentPage = val;    //动态改变
     }
   }
 }

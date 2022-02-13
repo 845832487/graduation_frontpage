@@ -37,6 +37,7 @@ export default {
           ElMessage.error(res.msg);
           sessionStorage.removeItem("auth");
           sessionStorage.removeItem("user");
+          sessionStorage.removeItem("role");
           this.$router.push("/login");
         }
       });
