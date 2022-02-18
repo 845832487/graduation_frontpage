@@ -28,7 +28,7 @@
       <el-table-column type="selection"/>
       <el-table-column prop="id" label="账号" width="180"/>
       <el-table-column prop="name" label="姓名" width="180"/>
-      <el-table-column prop="job" label="职位" width="180" :formatter="jobFormat"/>
+      <el-table-column prop="job" label="职位" width="180"/>
       <el-table-column prop="buildingInCharge" label="负责楼号" width="180"/>
       <el-table-column prop="sex" label="性别" width="180" :formatter="sexFormat"/>
       <el-table-column prop="telephone" label="联系电话"/>
@@ -73,7 +73,16 @@
             <el-input v-model="form.id" style="width: 80%" v-bind:disabled="inputDisabled"></el-input>
           </el-form-item>
           <el-form-item label="职位">
-            <el-input v-model="form.job" style="width: 80%"></el-input>
+            <!--            <el-input v-model="form.job" style="width: 80%" :label="jobFormat"></el-input>-->
+            <el-select v-model="form.job" class="m-2" placeholder="Select" fit-input-width>
+              <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="负责楼号">
             <el-input v-model="form.buildingInCharge" style="width: 80%"></el-input>
@@ -111,7 +120,7 @@
             <el-table-column prop="id" label="账号" width="180"/>
             <el-table-column prop="name" label="姓名" width="180"/>
             <el-table-column prop="sex" label="性别" width="180" :formatter="sexFormat"/>
-            <el-table-column prop="job" label="职位" width="180" :formatter="jobFormat"/>
+            <el-table-column prop="job" label="职位" width="180"/>
             <el-table-column prop="buildingInCharge" label="负责楼号" width="180"/>
           </el-table>
 
@@ -167,7 +176,28 @@ export default {
       preId: 0,
       form: {},
       tableData: [],
-      selectedList: []
+      selectedList: [],
+      options: [{
+        value: '普通员工',
+        label: '普通员工',
+      },
+        {
+          value: '宿管',
+          label: '宿管',
+        },
+        {
+          value: '水电修理工',
+          label: '水电修理工',
+        },
+        {
+          value: '送水员',
+          label: '送水员',
+        },
+        {
+          value: '公寓中心领导',
+          label: '公寓中心领导',
+        },
+      ]
     }
   },
   methods: {
@@ -212,7 +242,7 @@ export default {
         obj.id = String(item["账号"]);
         obj.name = String(item["姓名"]);
         obj.sex = item["性别"] === "男";
-        obj.job = item["职位"] === "普通员工" ? 0 : "宿管" ? 1 : 9;
+        obj.job = item["职位"];
         obj.buildingInCharge = item["负责楼号"];
         arr.push(obj);
       })
@@ -289,23 +319,6 @@ export default {
         return '男'
       } else if (row.sex === false) {
         return '女'
-      }
-    },
-    jobFormat(row) {
-      if (row.job === 0) {
-        return "普通员工";
-      } else if (row.job === 1) {
-        return "宿管"
-      } else if (row.job === 2) {
-        return "水电修理工"
-      } else if (row.job === 3) {
-        return "送水员"
-      } else if (row.job === 4) {
-        return "公寓中心领导"
-      } else if (row.job === 5) {
-
-      } else {
-        return "职业数据出错,请修改"
       }
     },
     handleSizeChange(val) {

@@ -25,7 +25,7 @@
           <span>日常功能</span>
         </template>
         <el-menu-item index="/returnLate" @click="this.$router.push('/returnLate')">晚归申请</el-menu-item>
-        <el-menu-item index="2-2">水电维修</el-menu-item>
+        <el-menu-item index="2-2" @click="this.$router.push('/repair')">水电维修</el-menu-item>
         <el-menu-item index="2-3">宿舍送水</el-menu-item>
       </el-sub-menu>
       <el-sub-menu index="3" >
@@ -33,10 +33,11 @@
           <el-icon><setting /></el-icon>
           <span>通知审批</span>
         </template>
-        <el-menu-item index="3-1">待处理
-          <el-tag class="ml-2" type="danger" size="small" style="margin-left: 5px">99</el-tag>
+        <el-menu-item index="3-1" @click="this.$router.push('/notApproved')">待处理
+          <el-tag class="ml-2" type="danger" size="small" style="margin-left: 5px">{{tipsNum}}</el-tag>
         </el-menu-item>
-        <el-menu-item index="3-2">已处理</el-menu-item>
+        <el-menu-item index="3-2" @click="this.$router.push('/Approved')">已提交</el-menu-item>
+        <el-menu-item index="3-2" @click="this.$router.push('/Approved')">已处理</el-menu-item>
       </el-sub-menu>
       <el-sub-menu index="4">
         <template #title>
@@ -65,16 +66,27 @@ export default {
       workerManageVisible: false,
       activeIndex: '',
       opends: ['1','3'],
+      tipsNum: 0
     };
   },
   created() {
     this.show();
-    /*
-        this.getUserInfo();
-    */
+    this.getTips();
+
     this.activeIndex = this.$route.path;
   },
   methods: {
+    getTips() {
+      request.get("/announce/getTipsNum",{
+        params:{
+          id: sessionStorage.getItem("user")
+        }
+      }).then(res=>{
+        if (res.code === 666) {
+          this.tipsNum = res.data;
+        }else this.tipsNum = -1;
+      })
+    },
     show() {
       switch (sessionStorage.getItem('role')) {
         case 'student':

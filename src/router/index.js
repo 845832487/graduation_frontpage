@@ -42,12 +42,36 @@ const routes = [
                 component: () => import('../views/error/noPermission')
             },
             {
+                path: "/notApproved",
+                name: "NotApproved",
+                meta: {
+                    role: ['student', 'worker', 'admin']
+                },
+                component: () => import('../views/approval/notApproved')
+            },
+            {
+                path: "/Approved",
+                name: "Approved",
+                meta: {
+                    role: ['student', 'worker', 'admin']
+                },
+                component: () => import('../views/approval/Approved')
+            },
+            {
                 path: "/returnLate",
                 name: "ReturnLate",
                 meta: {
                     role: ['student', 'admin']
                 },
                 component: () => import('../views/function/returnLate')
+            },
+            {
+                path: "/repair",
+                name: "Repair",
+                meta: {
+                    role: ['student', 'worker', 'admin']
+                },
+                component: () => import('../views/function/repair')
             }
 
         ]

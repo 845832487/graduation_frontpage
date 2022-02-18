@@ -4,7 +4,7 @@
       <el-col :span="16"></el-col>
       <el-col :span="4">
         <el-dropdown style="padding-top: 10px">
-          111
+          用户管理
         <span class="el-dropdown-link">
           <el-icon class="el-icon--right">
             <arrow-down />
@@ -13,7 +13,7 @@
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item @click="$router.push('/personalInfo')">个人信息</el-dropdown-item>
-              <el-dropdown-item @click="logout">注销用户</el-dropdown-item>
+              <el-dropdown-item @click="logout">推出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -23,11 +23,19 @@
 <script>
 import router from "../router";
 
+
 export default {
   name: "Header",
   components: {ArrowDown},
 
+
+  data(){
+    return{
+      userName: '用户名',
+    }
+  },
   methods: {
+
     logout() {
       sessionStorage.removeItem("auth");
       sessionStorage.removeItem("user");
