@@ -251,7 +251,7 @@ export default {
       request.get("/studentDetail/findPage", {
         params: {
           pageNum: this.currentPage,
-          pageSize: this.pageSize,
+          pageSize: 1000,
           search: this.input
         }
       }).then(res => {

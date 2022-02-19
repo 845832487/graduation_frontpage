@@ -274,14 +274,14 @@ export default {
       this.dialogVisible = true;
     },
     load() {
-      console.log(this.input)
       request.get("/workerDetail/findPage", {
         params: {
           pageNum: this.currentPage,
-          pageSize: this.pageSize,
+          pageSize: 1000,
           search: this.input
         }
       }).then(res => {
+        console.log(res.data.records)
         this.tableData = res.data.records
         this.total = this.tableData.length;
       });

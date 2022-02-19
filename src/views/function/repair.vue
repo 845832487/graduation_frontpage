@@ -3,22 +3,22 @@
   <!--    做到这 喝多了 继续做 后端接口也还没写 -->
   <el-form
       ref="ruleFormRef"
-      :model="returnLateForm"
+      :model="repairForm"
       status-icon
       label-width="100px"
       class="demo-ruleForm"
   >
     <el-form-item label="申请人" prop="pass">
       <el-input
-          v-model="returnLateForm.applicantId"
+          v-model="repairForm.applicantId"
           type="text"
           autocomplete="off"
           disabled
       ></el-input>
     </el-form-item>
-    <el-form-item label="申请原因" prop="checkPass" >
+    <el-form-item label="情况概述" prop="checkPass">
       <el-input
-          v-model="returnLateForm.message"
+          v-model="repairForm.message"
           type="textarea"
           :rows="10"
           autocomplete="off"
@@ -36,7 +36,7 @@
     </el-form-item>
 
     <el-form-item label="选择审批人">
-      <el-select v-model="returnLateForm.approvalId" placeholder="选择宿管">
+      <el-select v-model="repairForm.approvalId" placeholder="选择修理工">
         <el-option
             v-for="item in approvalList"
             :key="item.id"
@@ -50,7 +50,8 @@
     <el-form-item>
       <el-button type="primary"
                  @click="submitForm"
-      >确定提交</el-button
+      >确定提交
+      </el-button
       >
     </el-form-item>
   </el-form>
@@ -61,34 +62,42 @@
 <script>
 import request from "../../utils/request";
 import {ElMessage} from "element-plus";
+
 export default {
   created() {
-    this.getDormKeeper();
+    this.getRepairer();
   },
 
   name: "repair",
   data() {
-    return{
-      returnLateForm: {
+    return {
+      repairForm: {
         applicantId: sessionStorage.getItem("user"),
       },
       approvalList: []
     }
   },
-  methods:{
+  methods: {
     setThisUrl(res) {
-      this.returnLateForm.fileAddr = res.data;
+      this.repairForm.fileAddr = res.data;
     },
     submitForm() {
-      this.returnLateForm.aplicationId = '';
-      request.put("/returnLate/insReturnLate", this.returnLateForm).then(res=>{
-        if (res.code === 666) {
-          ElMessage.success(res.data)
-        }else ElMessage.error(res.msg)
-      })
+      if (this.repairForm.approvalId === undefined) {
+        ElMessage.error("必须选择审批人");
+      } else {
+        this.repairForm.aplicationId = '';
+        request.put("/repair/insRepair", this.repairForm).then(res => {
+          if (res.code === 666) {
+            ElMessage.success(res.data);
+            this.$router.push('/appSubmitted');
+          } else ElMessage.error(res.msg)
+        })
+      }
+
     },
-    getDormKeeper() {
-      request.get("/returnLate/getAllDormKeeper").then(res => {
+    getRepairer() {
+      request.get("/repair/getAllRepairer").then(res => {
+        console.log(res);
         this.approvalList = res.data;
       });
     }

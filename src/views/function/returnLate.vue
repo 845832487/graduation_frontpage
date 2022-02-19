@@ -89,12 +89,18 @@ export default {
       this.returnLateForm.fileAddr = res.data;
     },
     submitForm() {
-      this.returnLateForm.aplicationId = '';
-      request.put("/returnLate/insReturnLate", this.returnLateForm).then(res=>{
-        if (res.code === 666) {
-          ElMessage.success(res.data)
-        }else ElMessage.error(res.msg)
-      })
+      if (this.returnLateForm.approvalId === undefined || this.returnLateForm.lateDate === undefined) {
+        ElMessage.error("必须选择晚归日期以及审批人");
+      } else {
+        this.returnLateForm.aplicationId = '';
+        request.put("/returnLate/insReturnLate", this.returnLateForm).then(res => {
+          if (res.code === 666) {
+            ElMessage.success(res.data);
+            this.$router.push('/appSubmitted');
+          } else ElMessage.error(res.msg)
+        });
+      }
+
     },
     getDormKeeper() {
       request.get("/returnLate/getAllDormKeeper").then(res => {

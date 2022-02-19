@@ -25,8 +25,7 @@
           <span>日常功能</span>
         </template>
         <el-menu-item index="/returnLate" @click="this.$router.push('/returnLate')">晚归申请</el-menu-item>
-        <el-menu-item index="2-2" @click="this.$router.push('/repair')">水电维修</el-menu-item>
-        <el-menu-item index="2-3">宿舍送水</el-menu-item>
+        <el-menu-item index="/repair" @click="this.$router.push('/repair')">水电维修</el-menu-item>
       </el-sub-menu>
       <el-sub-menu index="3" >
         <template #title>
@@ -36,8 +35,8 @@
         <el-menu-item index="3-1" @click="this.$router.push('/notApproved')">待处理
           <el-tag class="ml-2" type="danger" size="small" style="margin-left: 5px">{{tipsNum}}</el-tag>
         </el-menu-item>
-        <el-menu-item index="3-2" @click="this.$router.push('/Approved')">已提交</el-menu-item>
-        <el-menu-item index="3-2" @click="this.$router.push('/Approved')">已处理</el-menu-item>
+        <el-menu-item index="3-2" @click="this.$router.push('/submitted')">已提交</el-menu-item>
+        <el-menu-item index="3-2" @click="this.$router.push('/approved')">已处理</el-menu-item>
       </el-sub-menu>
       <el-sub-menu index="4">
         <template #title>

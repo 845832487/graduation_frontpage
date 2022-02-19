@@ -39,7 +39,15 @@ const routes = [
                 meta: {
                     role: ['student', 'worker', 'admin']
                 },
-                component: () => import('../views/error/noPermission')
+                component: () => import('../views/error&success/noPermission')
+            },
+            {
+                path: "/appSubmitted",
+                name: "AppSubmitted",
+                meta: {
+                    role: ['student', 'worker', 'admin']
+                },
+                component: () => import('../views/error&success/applicationSubmitted')
             },
             {
                 path: "/notApproved",
@@ -50,12 +58,20 @@ const routes = [
                 component: () => import('../views/approval/notApproved')
             },
             {
-                path: "/Approved",
+                path: "/approved",
                 name: "Approved",
                 meta: {
                     role: ['student', 'worker', 'admin']
                 },
                 component: () => import('../views/approval/Approved')
+            },
+            {
+                path: "/submitted",
+                name: "Submitted",
+                meta: {
+                    role: ['student', 'worker', 'admin']
+                },
+                component: () => import('../views/approval/Submitted')
             },
             {
                 path: "/returnLate",
