@@ -39,7 +39,7 @@ const routes = [
                 meta: {
                     role: ['student', 'worker', 'admin']
                 },
-                component: () => import('../views/error&success/noPermission')
+                component: () => import('../views/error&success/NoPermission')
             },
             {
                 path: "/appSubmitted",
@@ -47,7 +47,7 @@ const routes = [
                 meta: {
                     role: ['student', 'worker', 'admin']
                 },
-                component: () => import('../views/error&success/applicationSubmitted')
+                component: () => import('../views/error&success/ApplicationSubmitted')
             },
             {
                 path: "/notApproved",
@@ -55,7 +55,7 @@ const routes = [
                 meta: {
                     role: ['student', 'worker', 'admin']
                 },
-                component: () => import('../views/approval/notApproved')
+                component: () => import('../views/approval/NotApproved')
             },
             {
                 path: "/approved",
@@ -79,7 +79,7 @@ const routes = [
                 meta: {
                     role: ['student', 'admin']
                 },
-                component: () => import('../views/function/returnLate')
+                component: () => import('../views/function/ReturnLate')
             },
             {
                 path: "/repair",
@@ -87,7 +87,31 @@ const routes = [
                 meta: {
                     role: ['student', 'worker', 'admin']
                 },
-                component: () => import('../views/function/repair')
+                component: () => import('../views/function/Repair')
+            },
+            {
+                path: "/termStartCheckin",
+                name: "TermStartCheckin",
+                meta: {
+                    role: ['student', 'admin']
+                },
+                component: () => import('../views/function/TermStartCheckIn')
+            },
+            {
+                path: "/termFinishCheckout",
+                name: "TermFinishCheckout",
+                meta: {
+                    role: ['student', 'admin']
+                },
+                component: () => import('../views/function/TermFinishCheckout')
+            },
+            {
+                path: "/checkout",
+                name: "Checkout",
+                meta: {
+                    role: ['student', 'admin']
+                },
+                component: () => import('../views/function/Checkout')
             }
 
         ]

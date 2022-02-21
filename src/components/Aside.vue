@@ -32,20 +32,20 @@
           <el-icon><setting /></el-icon>
           <span>通知审批</span>
         </template>
-        <el-menu-item index="3-1" @click="this.$router.push('/notApproved')">待处理
+        <el-menu-item index="/notApproved" @click="this.$router.push('/notApproved')">待处理
           <el-tag class="ml-2" type="danger" size="small" style="margin-left: 5px">{{tipsNum}}</el-tag>
         </el-menu-item>
-        <el-menu-item index="3-2" @click="this.$router.push('/submitted')">已提交</el-menu-item>
-        <el-menu-item index="3-2" @click="this.$router.push('/approved')">已处理</el-menu-item>
+        <el-menu-item index="/submitted" @click="this.$router.push('/submitted')">已提交</el-menu-item>
+        <el-menu-item index="/approved" @click="this.$router.push('/approved')">已处理</el-menu-item>
       </el-sub-menu>
       <el-sub-menu index="4">
         <template #title>
           <el-icon><icon-menu /></el-icon>
           <span>其他功能</span>
         </template>
-        <el-menu-item index="4-1">退宿申请</el-menu-item>
-        <el-menu-item index="4-2">开学入住登记</el-menu-item>
-        <el-menu-item index="4-3">期末离宿登记</el-menu-item>
+        <el-menu-item index="/checkout" @click="this.$router.push('/checkout')">退宿申请</el-menu-item>
+        <el-menu-item index="/termStartCheckin" @click="this.$router.push('/termStartCheckin')">开学入住登记</el-menu-item>
+        <el-menu-item index="/termFinishCheckout" @click="this.$router.push('/termFinishCheckout')">期末离宿登记</el-menu-item>
       </el-sub-menu>
     </el-menu>
   </div>

@@ -2,7 +2,8 @@
   <el-table :data="tableData" style="width: 100%" stripe>
     <el-table-column prop="type" label="任务类型" width="300" fit />
     <el-table-column prop="createDate" label="创建时间" width="450"/>
-    <el-table-column prop="condition" label="任务状态" width="300" fit/>
+    <el-table-column prop="applicantId" label="申请人学号（账号）" width="300" fit/>
+    <el-table-column prop="applicantName" label="申请人姓名" width="300" fit/>
     <el-table-column fixed="right" label="操作" width="120">
       <template #default>
         <el-button type="text" size="small"
@@ -18,7 +19,7 @@
 import request from "../../utils/request";
 import {ElMessage} from "element-plus";
 export default {
-  name: "Submitted",
+  name: "NotApproved",
   created() {
     this.load();
   },
@@ -30,7 +31,7 @@ export default {
   },
   methods:{
     load() {
-      request.get("/announce/getSubmittedTaskList", {
+      request.get("/announce/getNotApprovedTaskList", {
         params:{
           id: sessionStorage.getItem("user")
         }

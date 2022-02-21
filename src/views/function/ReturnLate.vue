@@ -75,7 +75,7 @@ export default {
     this.getDormKeeper();
   },
 
-  name: "returnLate",
+  name: "ReturnLate",
   data() {
     return{
       returnLateForm: {
@@ -103,7 +103,11 @@ export default {
 
     },
     getDormKeeper() {
-      request.get("/returnLate/getAllDormKeeper").then(res => {
+      request.get("/returnLate/getAllDormKeeper",{
+        params:{
+          id: sessionStorage.getItem("user")
+        }
+      }).then(res => {
         this.approvalList = res.data;
       });
     }
