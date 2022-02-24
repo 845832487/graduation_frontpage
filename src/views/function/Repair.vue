@@ -8,6 +8,9 @@
       label-width="100px"
       class="demo-ruleForm"
   >
+    <el-form-item>
+      <div style="font-size: 25px;font-weight: bold;margin: 5px">水电维修</div>
+    </el-form-item>
     <el-form-item label="申请人" prop="pass">
       <el-input
           v-model="repairForm.applicantId"

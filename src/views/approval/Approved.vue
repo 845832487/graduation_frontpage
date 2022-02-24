@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="tableData" style="width: 100%" stripe>
+  <el-table :data="tableData" style="width: 100%" stripe >
     <el-table-column prop="type" label="任务类型" width="300" fit />
     <el-table-column prop="createDate" label="创建时间" width="450"/>
     <el-table-column prop="applicantId" label="申请人" width="300" fit/>

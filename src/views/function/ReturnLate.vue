@@ -1,5 +1,6 @@
 <template>
 
+
 <!--    做到这 喝多了 继续做 后端接口也还没写 -->
     <el-form
         ref="ruleFormRef"
@@ -8,6 +9,12 @@
         label-width="100px"
         class="demo-ruleForm"
     >
+
+      <el-form-item>
+        <div style="font-size: 25px;font-weight: bold;margin: 5px">晚归申请</div>
+      </el-form-item>
+
+
       <el-form-item label="申请人" prop="pass">
         <el-input
             v-model="returnLateForm.applicantId"

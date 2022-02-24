@@ -80,10 +80,6 @@
           <el-form-item label="宿舍编号">
             <el-input v-model="form.dormNum" style="width: 80%"></el-input>
           </el-form-item>
-          <el-form-item label="性别">
-            <el-radio v-model="form.sex" :label='true'>男</el-radio>
-            <el-radio v-model="form.sex" :label=false>女</el-radio>
-          </el-form-item>
         </el-form>
         <template #footer>
       <span class="dialog-footer">

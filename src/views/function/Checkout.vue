@@ -8,6 +8,9 @@
       label-width="100px"
       class="demo-ruleForm"
   >
+    <el-form-item>
+      <div style="font-size: 25px;font-weight: bold;margin: 5px">退宿申请</div>
+    </el-form-item>
     <el-form-item label="申请人" prop="pass">
       <el-input
           v-model="checkoutForm.applicantId"
@@ -37,7 +40,7 @@
     </el-form-item>
 
     <el-form-item label="选择审批人">
-      <el-select v-model="checkoutForm.approvalId" placeholder="选择宿管">
+      <el-select v-model="checkoutForm.dormkeeperId" placeholder="选择宿管">
         <el-option
             v-for="item in approvalList"
             :key="item.id"
@@ -83,7 +86,7 @@ export default {
       this.checkoutForm.fileAddr = res.data;
     },
     submitForm() {
-      if (this.checkoutForm.approvalId === undefined) {
+      if (this.checkoutForm.dormkeeperId === undefined) {
         ElMessage.error("必须选择审批人");
       } else {
         this.checkoutForm.aplicationId = '';
