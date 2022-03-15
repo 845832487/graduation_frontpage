@@ -44,11 +44,7 @@ export default {
     },
   }
 }
-window.addEventListener("beforeunload", function (e) {
-  const confirmationMessage = "\o/";
-  (e || window.event).returnValue = confirmationMessage; // Gecko and Trident
-  return confirmationMessage; // Gecko and WebKit
-});
+
 
 </script>
 

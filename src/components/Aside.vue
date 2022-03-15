@@ -15,8 +15,10 @@
           <span>信息管理</span>
         </template>
           <el-menu-item index="/personalInfo" @click="this.$router.push('/personalInfo')">个人信息</el-menu-item>
+          <el-menu-item v-if="studentManageVisible" index="/dormDetail" @click="this.$router.push('/dormDetail')">宿舍管理</el-menu-item>
           <el-menu-item v-if="studentManageVisible" index="/studentDetail" @click="this.$router.push('/studentDetail')">学生管理</el-menu-item>
           <el-menu-item v-if="workerManageVisible" index="/workerDetail" @click="this.$router.push('/workerDetail')">员工管理</el-menu-item>
+
 
       </el-sub-menu>
       <el-sub-menu index="2">
@@ -26,6 +28,7 @@
         </template>
         <el-menu-item index="/returnLate" @click="this.$router.push('/returnLate')">晚归申请</el-menu-item>
         <el-menu-item index="/repair" @click="this.$router.push('/repair')">水电维修</el-menu-item>
+        <el-menu-item index="/allocateDorm" @click="this.$router.push('/allocateDorm')">分配宿舍</el-menu-item>
       </el-sub-menu>
       <el-sub-menu index="3" >
         <template #title>

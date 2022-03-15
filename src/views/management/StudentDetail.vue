@@ -3,12 +3,12 @@
     <el-row>
       <el-col span="8">
         <div style="margin: 15px">
-          <el-button @click="add_student">新增</el-button>
-          <el-button @click="multiAddVisible = true">批量导入</el-button>
+          <el-button @click="add_student" v-if="checkAuth('admin')">新增</el-button>
+          <el-button @click="multiAddVisible = true" v-if="checkAuth('admin')">批量导入</el-button>
           <el-popconfirm title="确定删除?"
                          @confirm="delMultiStudent">
             <template #reference>
-              <el-button type="danger"> 批量删除
+              <el-button type="danger" v-if="checkAuth('admin')"> 批量删除
               </el-button>
             </template>
           </el-popconfirm>
@@ -44,6 +44,7 @@
                          @confirm="delInfo(scope.row)">
             <template #reference>
               <el-button size="small"
+                         v-if="checkAuth('admin')"
                          type="danger"> 删除
               </el-button>
             </template>
@@ -79,6 +80,10 @@
           </el-form-item>
           <el-form-item label="宿舍编号">
             <el-input v-model="form.dormNum" style="width: 80%"></el-input>
+          </el-form-item>
+          <el-form-item label="性别" disabled>
+            <el-radio v-model="form.sex" :label='true'>男</el-radio>
+            <el-radio v-model="form.sex" :label=false>女</el-radio>
           </el-form-item>
         </el-form>
         <template #footer>
@@ -143,8 +148,6 @@ export default {
   name: 'StudentDetail',
   components: {},
 
-  mounted() {
-  },
   created() {
     this.load();
   },
@@ -171,6 +174,11 @@ export default {
     }
   },
   methods: {
+    checkAuth(role) {
+      if (sessionStorage.getItem('role') === role) {
+        return true;
+      }else return false;
+    },
     delMultiStudent() {
       request.delete("/studentDetail/delMultiStudents",{
         data:{
@@ -186,7 +194,6 @@ export default {
 
     selectChange(val) {
       this.selectedList = val;
-      console.log(val)
     },
     upLoad() {
       request.put("/studentDetail/addMultiStudents", this.studentList).then(res=>{
@@ -237,13 +244,13 @@ export default {
       this.load()
     },
     editInfo(row) {
+      console.log(row)
       this.form = JSON.parse(JSON.stringify(row));
       this.preId = this.form.id;
       this.inputChange(this.form);
       this.dialogVisible = true;
     },
     load() {
-      console.log(this.input)
       request.get("/studentDetail/findPage", {
         params: {
           pageNum: this.currentPage,

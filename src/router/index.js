@@ -112,6 +112,22 @@ const routes = [
                     role: ['student', 'admin']
                 },
                 component: () => import('../views/function/Checkout')
+            },
+            {
+                path: "/dormDetail",
+                name: "DormDetail",
+                meta: {
+                    role: ['worker', 'admin']
+                },
+                component: () => import('../views/management/DormDetail')
+            },
+            {
+                path: "/allocateDorm",
+                name: "AllocateDorm",
+                meta: {
+                    role: ['admin']
+                },
+                component: () => import('../views/function/AllocateDorm')
             }
 
         ]

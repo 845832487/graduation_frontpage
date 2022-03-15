@@ -98,6 +98,9 @@ export default {
     }
   },
   methods: {
+    downLoad() {
+      window.open(this.taskDetail.fileAddr);
+    },
     submit() {
       if (this.taskDetail.applicationId.substring(0, 4) === 'tssq') {
         if (this.counselorVisible===true&&this.dormManagerVisible===false) {
@@ -119,8 +122,6 @@ export default {
 
 
       } else {
-        alert(this.taskDetail.applicationId)
-        let app = {};
         request.get("/announce/submit",{
           params:{
             applicationId: this.taskDetail.applicationId
@@ -135,9 +136,20 @@ export default {
         this.dormManagerVisible = false;
         this.detailVisible = false;
       }
+      location.reload();
     },
     deny() {
-
+      request.get("/announce/deny",{
+        params:{
+          applicationId: this.taskDetail.applicationId
+        }
+      }).then(res => {
+        if (res.code === 666) {
+          ElMessage.success(res.data);
+        } else ElMessage.error("审批失败");
+        this.dialogVisible = false;
+        location.reload();
+      })
     },
     getDetail(row) {
       this.taskDetail = {};
