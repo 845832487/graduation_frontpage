@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'GDFP-code-pub'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3C5F7DCFCD8C487EA5F485CED2907592 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1C7D934BA8464330831AAE6B3F35DAA6 }}
           package: .
